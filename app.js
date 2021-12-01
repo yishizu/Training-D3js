@@ -24,3 +24,24 @@ container.selectAll('.bar')
 .classed('bar',true)
 .style('width','50px')
 .style('height',data=>data.value*15+'px');
+
+const xScale = d3.scaleBand().domain(DUMMY_DATA.map((dataPoint)=>dataPoint.id)).rangeRound([0,350]).padding(0.5);
+const yScale = d3.scaleLinear().domain([0,20]).range([200,0]);
+
+const container2 = d3.select('svg')
+.classed('container',true)
+.style('border','1px solid red');
+
+const bars = container2.selectAll('.bar2')
+.data(DUMMY_DATA)
+.enter()
+.append('rect')
+.classed('bar2',true)
+.attr('width',xScale.bandwidth())
+.attr('height',data=>200-yScale(data.value))
+.attr('x',data=>xScale(data.id))
+.attr('y',data=>yScale(data.value));
+
+setTimeout(()=>{
+    bars.data(DUMMY_DATA.slice(0,2)).exit().remove();
+},2000);
